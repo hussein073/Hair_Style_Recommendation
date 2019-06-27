@@ -105,7 +105,7 @@ def run_recommender(test_shape):
     plt.show()
     
     fav = input("Which style is your favorite? ")
-    yuck = input("Which file is your least favorite? ")
+    yuck = input("Which style is your least favorite? ")
     # update scores based on fav/least fav
 
     for row in range(0,r):
