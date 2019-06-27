@@ -147,7 +147,6 @@ results_df['KNN']=correct_list
 
 # ### Random Forest Classifier
 
-# don't need to run each time
 clf = RandomForestClassifier(max_depth=None, random_state=5,n_estimators=90,max_features='sqrt',
                             min_samples_leaf=5,min_samples_split=15,criterion='entropy', bootstrap=True)
 clf.fit(X_train_pca, Y_train)
@@ -173,10 +172,6 @@ clf.fit(X_train_pca, Y_train)
 #   
 # I toggled many other parameters but found little difference in performance as I changed them.
 # 
-
-# In[95]:
-
-## Takes a while to run! just use the rf_best to save time since that is random search already run
 
 param_grid = { 
     'n_estimators': [50,150, 250, 500],
@@ -288,7 +283,7 @@ def model_graph():
     ind = np.arange(6)  # the x locations for the groups
     width = 0.15       # the width of the bars
 
-    fig, ax = plt.subplots(figsize=(15, 7))
+    fig, ax = plt.subplots(figsize=(16, 17))
     al = 0.6
     rects1 = ax.bar(ind, results_df['MLP'], width, color='blue',alpha= al,tick_label = results_df['shape'])
     rects2 = ax.bar(ind + width, results_df['KNN'], width, color='green',alpha= al)
@@ -299,8 +294,9 @@ def model_graph():
     plt.legend(results_df.iloc[0:0,1:7],bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
            ncol=1, mode="expand", borderaxespad=0.)
 
-
     plt.ylabel('Accuracy')
+    plt.xlabel('Face Shapes')
+    plt.title('Comparison of Models')
     plt.show()
     
 model_graph()
