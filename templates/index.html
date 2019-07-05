@@ -1,0 +1,72 @@
+<html>
+  <head>
+    <title>Predict</title>
+    <script type="text/javascript" src="brython.js"></script>
+    <script type="text/javascript" src="brython_stdlib.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  </head>
+  <body onload="brython(1)">
+    <script type="text/python3">
+      from browser import document, ajax
+      import json
+      import warnings
+
+      def show_results(response):
+          if response.status==200 or response.status==0:
+              document["result"].html = response.text
+              document['recommendimages'].value = response.text
+          else:
+              warnings.warn(response.text)
+
+      def get_prediction(ev):
+          """Get the predicted probability."""
+
+          req = ajax.ajax()
+          req.bind('complete', show_results)
+          req.open('POST', '/predict', True)
+          req.set_header('content-type','application/json')
+          data = json.dumps({'file_name': document['uploadfilename'].value,
+                            'person_see_up_dos': document['personseeupdos'].value, 
+                            'person_hair_length': document['personhairlength'].value})
+          req.send(data)
+
+      document["predict_button"].bind("click", get_prediction)
+    </script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+          $('input[type="file"]').change(function(e){
+              var preview = document.querySelector('img'); //selects the query named img
+              var file    = document.querySelector('input[type=file]').files[0]; 
+              var reader  = new FileReader();
+
+              reader.onloadend = function () {
+                preview.src = reader.result;
+                $("#uploadfilename").val(file.name)
+              }
+            if (file) {
+              reader.readAsDataURL(file); //reads the data as a URL
+            } else {
+              preview.src = "";
+            }
+          });
+      });
+  </script>
+    <textarea id="user_input"></textarea>
+    <button id="predict_button">Predict!</button>
+    <input type="file" class="filenameupload" name="file">
+    <img src="" height="200" alt="Image preview...">
+    
+
+
+    <input type="text" name="name" id="personname"> 
+    <input type="text" name="seeupdos" id="personseeupdos">
+    <input type="text" name="hairlength" id="personhairlength">
+
+    <div id="result"></div>
+    <div id="resultpic"></div>
+    <input type="hidden" id="recommendimages" name="hiddenrecommendimages" value="" />
+
+
+    <input type="hidden" id="uploadfilename" name="hiddenfilename" value="" />
+  </body>
+</html>

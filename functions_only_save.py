@@ -12,65 +12,66 @@ import pathlib
 from pathlib import Path
 import os
 import random
+from sklearn.preprocessing import normalize
+from sklearn.preprocessing import StandardScaler 
+from sklearn.model_selection import train_test_split
+from sklearn.decomposition import PCA 
 
 
 image_dir = "Data/pics"   #celebrity search version
 
 
 
-def Distance(p1,p2):
-  dx = p2[0] - p1[0]
-  dy = p2[1] - p1[1]
-  return math.sqrt(dx*dx+dy*dy)
+def distance(p1,p2):
+    dx = p2[0] - p1[0]
+    dy = p2[1] - p1[1]
+    return math.sqrt(dx*dx+dy*dy)
 
-def ScaleRotateTranslate(image, angle, center = None, new_center = None, scale = None, resample=Image.BICUBIC):
-  if (scale is None) and (center is None):
-    return image.rotate(angle=angle, resample=resample)
-  nx,ny = x,y = center
-  sx=sy=1.0
-  if new_center:
-    (nx,ny) = new_center
-  if scale:
-    (sx,sy) = (scale, scale)
-  cosine = math.cos(angle)
-  sine = math.sin(angle)
-  a = cosine/sx
-  b = sine/sx
-  c = x-nx*a-ny*b
-  d = -sine/sy
-  e = cosine/sy
-  f = y-nx*d-ny*e
-  return image.transform(image.size, Image.AFFINE, (a,b,c,d,e,f), resample=resample)
+def scale_rotate_translate(image, angle, center = None, new_center = None, scale = None, resample=Image.BICUBIC):
+    if (scale is None) and (center is None):
+        return image.rotate(angle=angle, resample=resample)
+    nx,ny = x,y = center
+    sx=sy=1.0
+    if new_center:
+        (nx,ny) = new_center
+    if scale:
+        (sx,sy) = (scale, scale)
+    cosine = math.cos(angle)
+    sine = math.sin(angle)
+    a = cosine/sx
+    b = sine/sx
+    c = x-nx*a-ny*b
+    d = -sine/sy
+    e = cosine/sy
+    f = y-nx*d-ny*e
+    return image.transform(image.size, Image.AFFINE, (a,b,c,d,e,f), resample=resample)
 
-def CropFace(image, eye_left=(0,0), eye_right=(0,0), offset_pct=(0.3,0.3), dest_sz = (600,600)):
-  # calculate offsets in original image
-  offset_h = math.floor(float(offset_pct[0])*dest_sz[0])
-  offset_v = math.floor(float(offset_pct[1])*dest_sz[1])
-  # get the direction
-  eye_direction = (eye_right[0] - eye_left[0], eye_right[1] - eye_left[1])
-  # calc rotation angle in radians
-  rotation = -math.atan2(float(eye_direction[1]),float(eye_direction[0]))
-  #print(rotation)
-  # distance between them
-  dist = Distance(eye_left, eye_right)
-  # calculate the reference eye-width
-  reference = dest_sz[0] - 2.0*offset_h
-  # scale factor
-  scale = float(dist)/float(reference)
-  # rotate original around the left eye
-  
-  image = ScaleRotateTranslate(image, center=eye_left, angle=rotation)
-  # crop the rotated image
-  crop_xy = (eye_left[0] - scale*offset_h, eye_left[1] - scale*offset_v)
-  crop_size = (dest_sz[0]*scale, dest_sz[1]*scale)
-  image = image.crop((int(crop_xy[0]), int(crop_xy[1]), int(crop_xy[0]+crop_size[0]), int(crop_xy[1]+crop_size[1])))
-  # resize it
-  image = image.resize(dest_sz, Image.ANTIALIAS)
-  return image
+def crop_face(image, eye_left=(0,0), eye_right=(0,0), offset_pct=(0.3,0.3), dest_sz = (600,600)):
+    # calculate offsets in original image
+    offset_h = math.floor(float(offset_pct[0])*dest_sz[0])
+    offset_v = math.floor(float(offset_pct[1])*dest_sz[1])
+    # get the direction
+    eye_direction = (eye_right[0] - eye_left[0], eye_right[1] - eye_left[1])
+    # calc rotation angle in radians
+    rotation = -math.atan2(float(eye_direction[1]),float(eye_direction[0]))
+    # distance between them
+    dist = distance(eye_left, eye_right)
+    # calculate the reference eye-width
+    reference = dest_sz[0] - 2.0*offset_h
+    # scale factor
+    scale = float(dist)/float(reference)
+    # rotate original around the left eye
 
+    image = scale_rotate_translate(image, center=eye_left, angle=rotation)
+    # crop the rotated image
+    crop_xy = (eye_left[0] - scale*offset_h, eye_left[1] - scale*offset_v)
+    crop_size = (dest_sz[0]*scale, dest_sz[1]*scale)
+    image = image.crop((int(crop_xy[0]), int(crop_xy[1]), int(crop_xy[0]+crop_size[0]), int(crop_xy[1]+crop_size[1])))
+    # resize it
+    image = image.resize(dest_sz, Image.ANTIALIAS)
+    return image
 
-
-def make_face_df_save(image_select,filenum):
+def make_face_df_save(image_select,filenum,df):
     
     # This function looks at one image, draws points and saves points to DF
     pts = []
@@ -115,7 +116,7 @@ def make_face_df_save(image_select,filenum):
         eyes.append(pts[90:92])
 
         image =  Image.open(image_select)
-        crop_image = CropFace(image, eye_left=(lex, ley), eye_right=(rex, rey), offset_pct=(0.34,0.34), dest_sz=(300,300))
+        crop_image = crop_face(image, eye_left=(lex, ley), eye_right=(rex, rey), offset_pct=(0.34,0.34), dest_sz=(300,300))
         try:
             crop_image.save(str(image_select)+"_NEW_cropped.jpg")
         except:
@@ -204,14 +205,11 @@ def make_face_df_save(image_select,filenum):
         j = pts[13]    # point 7 y   for jaw length
         k = pts[20]    # point 11 x  for jaw length
         l = pts[21]    # point 11 y  for jaw length
-        
-        
              
         m = pts[8]     # point 5 x   for lower jaw length     
         n = pts[9]     # point 5 y
         o = pts[24]     # point 13 x
         p = pts[25]     # point 13 y
-
 
         face_width = np.sqrt(np.square(a - c) + np.square(b - d))
         #print(face_width)
@@ -240,4 +238,63 @@ def make_face_df_save(image_select,filenum):
         df.loc[filenum] = np.array(pts)
         #imshow(pil_image, cmap='gray')
             
+def find_face_shape(df,file_num):
+    data = pd.read_csv('all_features.csv',index_col = None)
+    data = data.drop('Unnamed: 0',axis = 1)
 
+    data_clean = data.dropna(axis=0, how='any')
+    X = data_clean
+    X = X.drop(['filenum','filename','classified_shape'] , axis = 1)
+    X_norm = normalize(X)
+    Y = data_clean['classified_shape']
+
+    scaler = StandardScaler()  
+    scaler.fit(X)  
+
+    X = scaler.transform(X)
+
+    ### Split into train/test sets
+
+    X_train, X_test, Y_train, Y_test = train_test_split(
+        X,Y,
+        test_size=0.25,
+        random_state=1200)
+
+    ### Apply PCA for dimension reduction
+
+    n_components = 18
+    pca = PCA(n_components=n_components, svd_solver='randomized',
+              whiten=True).fit(X)
+
+    X_train_pca = pca.transform(X_train)
+    X_test_pca = pca.transform(X_test)
+
+    # #Remove PCA 
+    X_train_pca = X_train
+    X_test_pca = X_test
+
+    ## Neural Network (MLP)
+
+    from sklearn.neural_network import MLPClassifier
+
+    # With best model tuning
+
+    best_mlp = MLPClassifier(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+           beta_2=0.999, early_stopping=False, epsilon=1e-08,
+           hidden_layer_sizes=(60, 100, 30, 100), learning_rate='constant',
+           learning_rate_init=0.01, max_iter=100, momentum=0.9,
+           nesterovs_momentum=True, power_t=0.5, random_state=525,
+           shuffle=True, solver='sgd', tol=0.0001, validation_fraction=0.1,
+           verbose=False, warm_start=False)
+    best_mlp.fit(X_train_pca, Y_train)
+
+    mlp_score = best_mlp.score(X_test_pca,Y_test)
+
+    y_pred = best_mlp.predict(X_test_pca)
+
+    mlp_crosstab = pd.crosstab(Y_test, y_pred, margins=True)
+    
+    test_row = df.ix[file_num].values.reshape(1,-1)
+    test_row = scaler.transform(test_row)  
+    test_shape = best_mlp.predict(test_row)
+    return test_shape
