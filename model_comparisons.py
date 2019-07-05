@@ -38,7 +38,6 @@ X = X.drop(['filenum','filename','classified_shape'] , axis = 1)
 X_norm = normalize(X)
 Y = data_clean['classified_shape']
 
-
 # # Supervised Learning
 
 # Standardize features by removing the mean and scaling to unit variance
@@ -52,7 +51,6 @@ X_train, X_test, Y_train, Y_test = train_test_split(
     X,Y,
     test_size=0.25,
     random_state=1200)
-
 
 # ### Use PCA for dimension reduction
 
@@ -144,7 +142,6 @@ for i in KNN_crosstab.index[0:5]:
 correct_list.append(round(neigh.score(X_test_pca,Y_test),2)*100)
 results_df['KNN']=correct_list
 
-
 # ### Random Forest Classifier
 
 clf = RandomForestClassifier(max_depth=None, random_state=5,n_estimators=90,max_features='sqrt',
@@ -208,7 +205,6 @@ for i in rfc_crosstab.index[0:5]:
 correct_list.append(round(rf_best.score(X_test_pca,Y_test),2)*100)
 results_df['Random_Forest']=correct_list
 
-
 # ### Gradient Boosting
 
 gb_best = ensemble.GradientBoostingClassifier(criterion='friedman_mse', init=None,
@@ -228,7 +224,6 @@ predict_test = gb_best.predict(X_test_pca)
 table_train = pd.crosstab(Y_train, predict_train, margins=True)
 table_test = pd.crosstab(Y_test, predict_test, margins=True)
 
-
 correct_list =[]
 for i in table_test.index[0:5]:
     correct = (table_test.at[i,i]/table_test.at[i,'All'])
@@ -238,7 +233,6 @@ for i in table_test.index[0:5]:
 correct_list.append(round(gb_best.score(X_test_pca,Y_test),2)*100)
 
 results_df['Gradient_Boosting']=correct_list
-
 
 # ## Linear Discriminant Analysis
 
@@ -259,7 +253,6 @@ param_grid2 = {
     'solver': ['eigen','lsqr'],
     'shrinkage': ['auto',0.2,0.5,0.7,1]
 }
-
 
 lda_param_search2 = GridSearchCV(estimator=lda, param_grid=param_grid2, cv= 5)
 lda_param_search2.fit(X_train_pca, Y_train)
@@ -301,7 +294,4 @@ def model_graph():
     
 model_graph()
 
-
 results_df
-
-

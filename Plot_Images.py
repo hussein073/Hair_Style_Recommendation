@@ -20,7 +20,6 @@ image_dir = ["Data/pics_for_overlaps/Sarah",
              "Data/pics_for_overlaps/Squares"
             ]
 
-
 plt.figure(figsize=(20,10))
 from PIL import Image, ImageDraw,ImageFont
 font = ImageFont.truetype("/Library/Fonts/Arial.ttf", 20)
@@ -45,5 +44,3 @@ for ddir in image_dir:
             draw.text((10,30) ,str(i)+" Pics", fill=None, font=font, anchor=None)
             plt.subplot(n_row, n_col, g )
             plt.imshow(im, alpha = a)
-
-
