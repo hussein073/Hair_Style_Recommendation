@@ -11,13 +11,13 @@ import os
 import random
 import matplotlib.pyplot as plt
 
-image_dir = "Data/pics"
+image_dir = "data/pics"
 
 style_df = pd.DataFrame()
 style_df = pd.DataFrame(columns = ['face_shape','hair_length','location','filename','score'])
 
-def process_rec_pics(style_df,image_dir = "Data/pics"):
-    image_root = "Data/rec_pics" 
+def process_rec_pics(style_df,image_dir = "data/pics"):
+    image_root = "data/rec_pics" 
     dir_list = ['heart','long','oval','square','round']
     filenum = 0   
     for dd in dir_list: 
@@ -82,7 +82,7 @@ def run_recommender(test_shape):
     
     plt.figure(figsize=(5 * n_col, 4 * n_row))
     plt.subplots_adjust(bottom=0, left=.01, right=.99, top=.90, hspace=.35)    
-    font = ImageFont.truetype("/Library/Fonts/Arial.ttf", 60)
+    font = ImageFont.truetype("fonts/Arial.ttf", 60)
     for p in range(0,r):
         idea = str(recommended_df.iloc[p]['location'] )
         idea = idea.replace('\\', '/')
@@ -125,7 +125,7 @@ def run_recommender_face_shape(test_shape,style_df,hair_length_input):
     
     plt.figure(figsize=(5 * n_col, 4 * n_row))
     plt.subplots_adjust(bottom=.06, left=.01, right=.99, top=.90, hspace=.35)    
-    font = ImageFont.truetype("/Library/Fonts/Arial.ttf", 60)
+    font = ImageFont.truetype("fonts/Arial.ttf", 60)
     for p in range(0,r):
         idea = str(recommended_df.iloc[p]['location'] )
         idea = idea.replace('\\', '/')

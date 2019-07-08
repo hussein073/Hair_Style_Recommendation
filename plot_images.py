@@ -12,17 +12,17 @@ import pathlib
 from pathlib import Path
 
 
-image_dir = ["Data/pics_for_overlaps/Sarah",
-             "Data/pics_for_overlaps/Allison",
-             "Data/pics_for_overlaps/Amanda_S",
-             "Data/pics_for_overlaps/Gisele",
-             "Data/pics_for_overlaps/Keira",
-             "Data/pics_for_overlaps/Squares"
+image_dir = ["data/pics_for_overlaps/Sarah",
+             "data/pics_for_overlaps/Allison",
+             "data/pics_for_overlaps/Amanda_S",
+             "data/pics_for_overlaps/Gisele",
+             "data/pics_for_overlaps/Keira",
+             "data/pics_for_overlaps/Squares"
             ]
 
 plt.figure(figsize=(20,10))
 from PIL import Image, ImageDraw,ImageFont
-font = ImageFont.truetype("/Library/Fonts/Arial.ttf", 20)
+font = ImageFont.truetype("fonts/Arial.ttf", 20)
 n_row = 2
 n_col = 3
 g = 0

@@ -20,7 +20,7 @@ def index():
 def predict():
     """Return a random prediction."""
     data = request.json
-    test_photo = 'Data/pics/recommendation_pics/' + data['file_name']
+    test_photo = 'data/pics/recommendation_pics/' + data['file_name']
     file_num = 2035
     style_df = pd.DataFrame()
     style_df = pd.DataFrame(columns = ['face_shape','hair_length','location','filename','score'])

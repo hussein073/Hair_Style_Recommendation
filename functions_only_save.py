@@ -18,7 +18,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.decomposition import PCA 
 
 
-image_dir = "Data/pics"   #celebrity search version
+image_dir = "data/pics"   #celebrity search version
 
 
 
