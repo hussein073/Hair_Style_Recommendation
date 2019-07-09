@@ -45,6 +45,14 @@
           else:
               warnings.warn(response.text)
 
+      def show_face_shape(response):
+          if response.status==200 or response.status==0:
+            print(response)
+            shape = json.loads(response.text)
+            document["display_user_face_shape"].html = 'Face Shape: ' + shape['face_shape'].title()
+          else:
+              warnings.warn(response.text)  
+
       def get_prediction(ev):
           """Get the predicted probability."""
           req = ajax.ajax()
@@ -56,7 +64,17 @@
                               'person_hair_length': document['personhairlength'].value})
           req.send(data)
 
+      def get_face_shape(ev):
+          """Get the user face shape."""
+          req = ajax.ajax()
+          req.bind('complete', show_face_shape)
+          req.open('POST', '/predict_user_face_shape', True)
+          req.set_header('content-type','application/json')
+          data = json.dumps({'file_name': document['uploadfilename'].value})
+          req.send(data)
+    
       document["predict_button"].bind("click", get_prediction)
+      document["predict_face_shape"].bind("click", get_face_shape)
     </script>
      <script type="text/javascript">
         $(document).ready(function(){
@@ -64,6 +82,7 @@
                 var preview = document.querySelector('.img-upload-pic'); //selects the query named img
                 var file    = document.querySelector('input[type=file]').files[0]; 
                 var predict_button_click = document.getElementById("predict_button");
+                var find_face_shape = document.getElementById("predict_face_shape");
 
                 var reader  = new FileReader();
                 reader.onloadend = function () {
@@ -72,6 +91,7 @@
                   predict_button_click.style.color = "black";
                   predict_button_click.style.borderColor = "black";
                   document.querySelector('#featuressection').click();
+                  find_face_shape.click();
                 }
               if (file) {
                 reader.readAsDataURL(file); //reads the data as a URL
@@ -196,6 +216,8 @@
               <div class="col-lg-6">
                 <div class="feature-item">
                   <!-- <i class="icon-screen-smartphone text-primary"></i> -->
+                  <div id="display_user_face_shape" style="font-family: Catamaran,Helvetica,Arial,sans-serif;
+                  font-size: 1.25rem;"></div>
                   <h5>What is your name</h5>
                   <input type="text" name="name" id="personname"> 
                   <!-- <a class="btn btn-outline btn-xl js-scroll-trigger predict_button">Predict!</a> -->
@@ -225,6 +247,7 @@
               <div class="col-lg-6">
                 <div class="feature-item">
                      <button id="predict_button" class="btn btn-outline btn-xl js-scroll-trigger">Predict!</button>
+                     <button id="predict_face_shape" style="border-color: white;"></button>
                   <!-- <i class="icon-lock-open text-primary"></i>
                   <h3>Open Source</h3>
                   <p class="text-muted">Since this theme is MIT licensed, you can use it commercially!</p> -->
