@@ -4,7 +4,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import Pipeline
 import pickle
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify, make_response
 from functions_only_save import make_face_df_save, find_face_shape
 from recommender import process_rec_pics, run_recommender_face_shape
 
@@ -51,8 +51,8 @@ def predict():
     make_face_df_save(test_photo,file_num,df)
     face_shape = find_face_shape(df,file_num)
     process_rec_pics(style_df)
-    run_recommender_face_shape(face_shape[0],style_df,hair_length_input)
-    return jsonify({'Face Shape': face_shape[0]})
+    img_filename = run_recommender_face_shape(face_shape[0],style_df,hair_length_input)
+    return jsonify({'Face Shape': face_shape[0], 'img_filename': img_filename})
 
 @app.route('/predict_user_face_shape', methods=['GET', 'POST'])
 def predict_user_face_shape():
@@ -64,3 +64,14 @@ def predict_user_face_shape():
     make_face_df_save(test_photo,file_num,df)
     face_shape = find_face_shape(df,file_num)
     return jsonify({'face_shape': face_shape[0]})
+
+@app.route('/output/<img_filename>')
+def output_image(img_filename):
+    """Send the output image."""
+    with open(f"output/{img_filename}", 'rb') as f:
+        img_data = f.read()
+    response = make_response(img_data)
+    response.headers['Content-Type'] = 'image/png'
+    return response
+        
+        

@@ -35,46 +35,61 @@
 
 <body id="page-top" onload="brython(1)">
     <script type="text/python3">
-      from browser import document, ajax
-      import json
-      import warnings
+from browser import document, ajax
+import json
+import warnings
 
-      def show_results(response):
-          if response.status==200 or response.status==0:
-              document['recommendimages'].value = response.text
-          else:
-              warnings.warn(response.text)
 
-      def show_face_shape(response):
-          if response.status==200 or response.status==0:
-            print(response)
-            shape = json.loads(response.text)
-            document["display_user_face_shape"].html = 'Face Shape: ' + shape['face_shape'].title()
-          else:
-              warnings.warn(response.text)  
+def show_results(response):
+    if response.status == 200:
+        response_data = json.loads(response.text)
+        img_filename = response_data["img_filename"]
+        document["output_image"].html = f'<img src="/{img_filename}" />'
+    else:
+        document["output_image"].html = f"Error: {response.text}"
 
-      def get_prediction(ev):
-          """Get the predicted probability."""
-          req = ajax.ajax()
-          req.bind('complete', show_results)
-          req.open('POST', '/predict', True)
-          req.set_header('content-type','application/json')
-          data = json.dumps({'file_name': document['uploadfilename'].value,
-                              'person_see_up_dos': document['personseeupdos'].value, 
-                              'person_hair_length': document['personhairlength'].value})
-          req.send(data)
 
-      def get_face_shape(ev):
-          """Get the user face shape."""
-          req = ajax.ajax()
-          req.bind('complete', show_face_shape)
-          req.open('POST', '/predict_user_face_shape', True)
-          req.set_header('content-type','application/json')
-          data = json.dumps({'file_name': document['uploadfilename'].value})
-          req.send(data)
-    
-      document["predict_button"].bind("click", get_prediction)
-      document["predict_face_shape"].bind("click", get_face_shape)
+def show_face_shape(response):
+    if response.status == 200 or response.status == 0:
+        print(response)
+        shape = json.loads(response.text)
+        document["display_user_face_shape"].html = (
+            "Face Shape: " + shape["face_shape"].title()
+        )
+    else:
+        warnings.warn(response.text)
+
+
+def get_prediction(ev):
+    """Get the predicted probability."""
+    document["output_image"].html = "Predicting..."
+    req = ajax.ajax()
+    req.bind("complete", show_results)
+    req.open("POST", "/predict", True)
+    req.set_header("content-type", "application/json")
+    data = json.dumps(
+        {
+            "file_name": document["uploadfilename"].value,
+            "person_see_up_dos": document["personseeupdos"].value,
+            "person_hair_length": document["personhairlength"].value,
+        }
+    )
+    req.send(data)
+
+
+def get_face_shape(ev):
+    """Get the user face shape."""
+    req = ajax.ajax()
+    req.bind("complete", show_face_shape)
+    req.open("POST", "/predict_user_face_shape", True)
+    req.set_header("content-type", "application/json")
+    data = json.dumps({"file_name": document["uploadfilename"].value})
+    req.send(data)
+
+
+document["predict_button"].bind("click", get_prediction)
+document["predict_face_shape"].bind("click", get_face_shape)
+      
     </script>
      <script type="text/javascript">
         $(document).ready(function(){
@@ -260,15 +275,14 @@
     </div>
   </section>
 
-  <!-- <section class="cta">
+  <section class="cta">
     <div class="cta-content">
       <div class="container">
-        <h2>Stop waiting.<br>Start building.</h2>
-        <a href="#contact" class="btn btn-outline btn-xl js-scroll-trigger">Let's Get Started!</a>
+        <div id="output_image"></div>
       </div>
     </div>
     <div class="overlay"></div>
-  </section> -->
+  </section>
 
   <section class="contact bg-primary" id="contact">
     <div class="container">

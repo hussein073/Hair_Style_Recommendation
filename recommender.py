@@ -10,6 +10,7 @@ from pathlib import Path
 import os
 import random
 import matplotlib.pyplot as plt
+import uuid
 
 image_dir = "data/pics"
 
@@ -123,7 +124,7 @@ def run_recommender_face_shape(test_shape,style_df,hair_length_input):
     recommended_df = style_df.loc[(style_df['face_shape'] ==face_shape_input) & (style_df['hair_length']== hair_length_input)].sort_values('score', ascending = 0).reset_index(drop=True)
     recommended_df = recommended_df.head(r)
     
-    plt.figure(figsize=(5 * n_col, 4 * n_row))
+    plt.figure(figsize=(4 * n_col, 3 * n_row))
     plt.subplots_adjust(bottom=.06, left=.01, right=.99, top=.90, hspace=.35)    
     font = ImageFont.truetype("fonts/Arial.ttf", 60)
     for p in range(0,r):
@@ -140,6 +141,9 @@ def run_recommender_face_shape(test_shape,style_df,hair_length_input):
         plt.imshow(img)
         img.close()
 
-    plt.show()
-    
-    return img_path
+    #plt.show()
+    img_id = uuid.uuid4()
+    img_filename=f"output/output_{img_id}.png"
+    plt.savefig(img_filename)
+    return img_filename
+    #return img_path
