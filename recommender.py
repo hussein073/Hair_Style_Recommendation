@@ -125,7 +125,7 @@ def run_recommender_face_shape(test_shape,style_df,hair_length_input):
     recommended_df = recommended_df.head(r)
     
     plt.figure(figsize=(4 * n_col, 3 * n_row))
-    plt.subplots_adjust(bottom=.06, left=.01, right=.99, top=.90, hspace=.35)    
+    plt.subplots_adjust(bottom=.06, left=.01, right=.99, top=.90, hspace=.50)    
     font = ImageFont.truetype("fonts/Arial.ttf", 60)
     for p in range(0,r):
         idea = str(recommended_df.iloc[p]['location'] )
