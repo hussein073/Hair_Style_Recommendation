@@ -1,6 +1,6 @@
 # Hair Style Recommendation
 ----------------
-### Hussein Sajid
+## Hussein Sajid
 
 [Slides](https://docs.google.com/presentation/d/1P00kP9RlkvARpfdGx9BnJ7n1cBU9U7WlW1D8v1zjY-0/edit?usp=sharing)
 
