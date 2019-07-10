@@ -31,8 +31,19 @@ Square faces have the most consensus which allowed for me to use the most celebr
 In order to collect the image dataset, a script was run to download 100 images from Google Images for each celebrity. The images were manually reviewed to ensure they will work for this project (I quickly confirmed that it was an image of celebrity's face and generally face-forward). The appropriate images were saved out to folders with the name of the classified shape. My dataset consisted of ~1500 images for 74 celebrities.
 
 ## Modeling
+An extraordinary amount of work has been done around computer vision such that a library called face_recognition exists to locate the features of a human face. This library was built using dlib’s state-of-the-art face recognition built with deep learning.
 
-<img src="/face_points.jpg" width="600," align="center" style="max-width:100%;">
+### Feature Extraction
+Below is a map of the facial feature map which generates 68 unique points.
+
+<img src="/face_points.jpg" width="600," align="center" style="display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;">
+
+Note that the face_recognition package does not provide a top point of the head, so on the basis of a few observations, I determined the half-way point on the face is point 29, so I used double the distance between the chin and point 29 to determine face height. Another available method would be to use the change color (from skin to hair) as the top of the face, however, this would require that the photos not have any bangs and may not work for all skin/hair color combinations.
+
+From these face points, I developed 23 additional features. For the first 16 features, I calculated the angles between the chin point (point 9) and each of the jaw line points (1-8, 10-17). Additionally, I added face width (the distance from point 1 to point 17), face height (described above), the ratio between them, the jaw width (distance between points 7 and 11), the jaw width to face width ratio, the mid-jaw width (distance between points 5 and 13), and the mid-jaw width to jaw width ratio.
 
 My approach will be to first build a facial classifier that will determine whether the user’s face is long, round, oval, heart- or square-shaped. Based on the classification, the model will recommend appealing hairstyles. This classification and recommendation system will help minimize human bias in hair style selection and increase the likelihood that the consumer will be matched with an ideal hair style and therefore more satisfied with her look. I will utilize several techniques and tools from the course: python, visualization, exploratory data analysis, web scraping, feature engineering, featurization, classification models, supervised clustering, unsupervised clustering, artificial neural networks, and possibly TensorFlow and Keras.  I will utilize web scraping to aggregate the celebrities’ pictures and their classified facial shape. Utilizing dlib’s face recognition package, each celebrity’s facial features will be mapped and used to develop a facial shape classification model. The recommendation system will be based on hair styles that are tagged to each face shape. 
 
