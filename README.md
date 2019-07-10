@@ -2,6 +2,7 @@
 ----------------
 ## Hussein Sajid
 
+[Jupyter Notebook](https://github.com/hussein073/Hair_Style_Recommendation/blob/master/Hair_Style_Recommender.ipynb)
 [Presentation (Google Slides)](https://docs.google.com/presentation/d/1P00kP9RlkvARpfdGx9BnJ7n1cBU9U7WlW1D8v1zjY-0/edit?usp=sharing)
 
 ## Business Understanding
