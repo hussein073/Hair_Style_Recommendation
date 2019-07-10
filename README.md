@@ -43,4 +43,5 @@ Jacqueline decides the beachy waves style will be perfect for the night.
 
 ## Requirements
 * Face Recognition
+
 ''' pip install face_recognition '''
