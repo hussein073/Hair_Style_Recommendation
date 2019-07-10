@@ -36,10 +36,7 @@ An extraordinary amount of work has been done around computer vision such that a
 ### Feature Extraction
 Below is a map of the facial feature map which generates 68 unique points.
 
-<img src="/face_points.jpg" width="600," align="center" style="display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;">
+<img src="/face_points.jpg" width="600," align="center" style="display: block;margin-left: auto;margin-right: auto;width: 50%;">
 
 Note that the face_recognition package does not provide a top point of the head, so on the basis of a few observations, I determined the half-way point on the face is point 29, so I used double the distance between the chin and point 29 to determine face height. Another available method would be to use the change color (from skin to hair) as the top of the face, however, this would require that the photos not have any bangs and may not work for all skin/hair color combinations.
 
