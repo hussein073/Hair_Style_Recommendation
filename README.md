@@ -18,7 +18,7 @@ There are five main face shapes often cited on websites and in style magazines. 
 * Square
 
 ## Data Preparation
-In order to develop a set of images labeled with the correct face shape, I turned to the experts in the fashion and style industry. I will scrape Google images to collect images of each celebrity. Visually inspect to select appropriate images and then organize into folders by shape.
+In order to develop a set of images labeled with the correct face shape, In order to develop a set of images labeled with the correct face shape, I turned to the experts in the fashion and style industry. I reviewed 22 websites and 234 celebrities. Of these, 33 celebrities had a unanimous classification from 3 or more sites (65 from 2 or more). 49 other celebrities had one or two conflicting classifications but had strong consensus towards a face shape with which I could use to classify. As a result, 74 celebrities were utilized in the analysis. There were ~160 celebrities I did not include as they either had too few citations or several conflicts. Because the topic is already subjective, I wanted to ensure I had a level of rigor to labeling my dataset to improve the outcomes. More labeled data would be ideal and would be an area of future enhancement.
 * Review websites (https://www.allure.com/, https://www.marieclaire.com/, https://www.instyle.com/ etc)
 * Identify celebrities
 
