@@ -69,6 +69,17 @@ This recommendation system can be improved by allowing users to set up profiles 
 Ideally, the recommendation system would represent a hybrid of both colloborative filtering and content-based recommendation algorithsm. The former is easier to implement and can still produce strong results. My recommendation system below is used to illustrate that the recommendations are based on the algorithm above to find face shape as well as a machine-learning algorithm that begins to learn preferences and store scores for each style (which could be associated to a user within an app or website). The possibilities are endless and the user would be able to rely upon the algorithms to give them the answers to their pressing style questions with little subjectivity and access to matching themselves up with styles from the best hair stylists in the industry.
 
 ## Requirements
+
+* dlib
+
+```
+pip install dlib
+```
+* CMake
+
+```
+pip install cmake
+```
 * Face Recognition
 
 ```
