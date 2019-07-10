@@ -22,6 +22,14 @@ In order to develop a set of images labeled with the correct face shape, In orde
 * Review websites (https://www.allure.com/, https://www.marieclaire.com/, https://www.instyle.com/ etc)
 * Identify celebrities
 
+Of the five face shapes, square faced celebrities were the most agreed upon, with 74% of those celebrities having a unanimous consensus on their shape. Round was second highest at 70%.
+
+Because the classification of face shape is subjective, this will impact the potential accuracy of the model, however, this model attempts to develop an approach to resolving conflict over face shape and providing more stringent guidelines on the definitions.
+
+Square faces have the most consensus which allowed for me to use the most celebrities with square faces.
+
+In order to collect the image dataset, a script was run to download 100 images from Google Images for each celebrity. The images were manually reviewed to ensure they will work for this project (I quickly confirmed that it was an image of celebrity's face and generally face-forward). The appropriate images were saved out to folders with the name of the classified shape. My dataset consisted of ~1500 images for 74 celebrities.
+
 ## Modeling
 My approach will be to first build a facial classifier that will determine whether the user’s face is long, round, oval, heart- or square-shaped. Based on the classification, the model will recommend appealing hairstyles. This classification and recommendation system will help minimize human bias in hair style selection and increase the likelihood that the consumer will be matched with an ideal hair style and therefore more satisfied with her look. I will utilize several techniques and tools from the course: python, visualization, exploratory data analysis, web scraping, feature engineering, featurization, classification models, supervised clustering, unsupervised clustering, artificial neural networks, and possibly TensorFlow and Keras.  I will utilize web scraping to aggregate the celebrities’ pictures and their classified facial shape. Utilizing dlib’s face recognition package, each celebrity’s facial features will be mapped and used to develop a facial shape classification model. The recommendation system will be based on hair styles that are tagged to each face shape. 
 
