@@ -40,3 +40,7 @@ She was confronted with way too many choices, Jacquelyn decides to try the Whatâ
 * Run Face Shape Classifier (Oval)
 * Recommended Style (Oval - Long) 
 Jacqueline decides the beachy waves style will be perfect for the night. 
+
+## Requirements
+* Face Recognition
+''' pip install face_recognition '''
